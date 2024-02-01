@@ -1,43 +1,27 @@
 //constants
 const baseUrl = 'https://book.soona.co';
 
-// reactive objects
-const accountId = {
-  value: null,
-  set(value) {
-    this.value = value;
-    this.valueListener(value);
-  },
-  get() {
-    return this.value;
-  },
-  valueListener(value) {},
-  addValueListener: function (listener) {
-    this.valueListener = listener;
-  },
-};
+const subscriptionTiers = [
+  'free', 'tier-one', 'tier-two', 'tier-three',
+]
 
-accountId.addValueListener(value => {
-  if (!value) return;
-  else {
-    navigationProcess();
-  }
-});
-
+const timeFrames = [ 'month', 'year' ];
 
 // variables
-let authToken = null,
-  selectedTier = null,
-  timeFrame = 0;
+  let selectedTier = null,
+  timeFrame = 1;
 
 // functions
-async function navigationProcess() {
-  if(!authToken || authToken === 'null' || authToken === 'undefined') return;
-  window.location.href = createMediaEditorPath();
+function navigationProcess() {
+  window.location.href = createSubscriptionDialoguePath();
 }
 
 function createSubscriptionDialoguePath() {
-  return `${baseUrl}/#/`;
+  let url = `${baseUrl}/#/sign-up?`;
+  if (selectedTier !== 0) {
+    url += `open_subscription_checkout=${subscriptionTiers[selectedTier]}&recurring_interval=${timeFrames[timeFrame]}&redirect=/`;
+  }
+  return url;
 }
 
 function getContextFromUrl() {
@@ -62,100 +46,89 @@ function linkClicked(subContext, linkLabel, linkHref) {
   }
 }
 
-// auth portal
-
-function receiveMessage(event) {
-  if (event.origin !== baseUrl) return;
-  let splitData = event.data.split(',');
-  authToken = splitData[1].split(':')[1];
-  if (!authToken || authToken === 'null' || authToken === 'undefined') return;
-  accountId.set(splitData[0].split(':')[1]);
-}
-
-function openAuthPortal() {
-  let popupWinWidth = 500;
-  let popupWinHeight = 600;
-  let left = window.screenX + (window.outerWidth - popupWinWidth) / 2;
-  let top = window.screenY + (window.outerHeight - popupWinHeight) / 2;
-  let popUpUrl = `${baseUrl}/#/sign-up?isExternalAuthPortal=true&redirect=/sign-in%3FisExternalAuthPortal=true`;
-  let newWindow = window.open(popUpUrl,'google window','width='+popupWinWidth+',height='+popupWinHeight+',top='+top+',left='+left);
-  newWindow.focus()
-  // add event listener to receive message from auth portal
-  window.addEventListener('message', receiveMessage, false);
-}
-
-const addHighlight = el => () => el.classList.add('highlight');
-const removeHighlight = el => () => el.classList.remove('highlight');
-const addHideClass = el => el.classList.add('hide');
-const removeHideClass = el => el.classList.remove('hide');
-
 document.addEventListener('DOMContentLoaded', function () {
   let yearlyButton = document.getElementById('yearly-toggle');
   let monthlyButton = document.getElementById('monthly-toggle');
-  let freeTierCardButton = document.getElementById('free-tier-card-button');
+  let yearlyFreeTierCardButton = document.getElementById('free-yearly-tier-card-button');
+  let monthlyFreeTierCardButton = document.getElementById('free-monthly-tier-card-button');
+  let freeTierCardButtons = [yearlyFreeTierCardButton, monthlyFreeTierCardButton];
   let freeTierTableButton = document.getElementById('free-tier-table-button');
-  let basicTierCardButton = document.getElementById('basic-tier-card-button');
+  let yearlyBasicTierCardButton = document.getElementById('basic-yearly-tier-card-button');
+  let monthlyBasicTierCardButton = document.getElementById('basic-monthly-tier-card-button');
+  let basicTierCardButtons = [yearlyBasicTierCardButton, monthlyBasicTierCardButton];
   let basicTierTableButton = document.getElementById('basic-tier-table-button');
-  let proTierCardButton = document.getElementById('pro-tier-card-button');
+  let yearlyProTierCardButton = document.getElementById('pro-yearly-tier-card-button');
+  let monthlyProTierCardButton = document.getElementById('pro-monthly-tier-card-button');
+  let proTierCardButtons = [yearlyProTierCardButton, monthlyProTierCardButton];
   let proTierTableButton = document.getElementById('pro-tier-table-button');
-  let businessTierCardButton = document.getElementById('enterprise-tier-card-button');
-  let businessTierTableButton = document.getElementById('enterprise-tier-table-button');
+  let yearlyBusinessTierCardButton = document.getElementById('business-yearly-tier-card-button');
+  let monthlyBusinessTierCardButton = document.getElementById('business-monthly-tier-card-button');
+  let businessTierCardButtons = [yearlyBusinessTierCardButton, monthlyBusinessTierCardButton];
+  let businessTierTableButton = document.getElementById('business-tier-table-button');
 
   yearlyButton.addEventListener('click', () => {
+    timeFrame = 1;
     linkClicked('subscription header', yearlyButton.innerHTML, null);
-    timeFrame = 0;
   });
 
   monthlyButton.addEventListener('click', () => {
+    timeFrame = 0;
     linkClicked('subscription header', monthlyButton.innerHTML, null);
-    timeFrame = 1;
   });
 
-  freeTierCardButton.addEventListener('click', () => {
-    linkClicked('pricing card', freeTierCardButton.innerHTML, null);
-    selectedTier = 0;
-    openAuthPortal();
+  freeTierCardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      selectedTier = 0;
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
+      navigationProcess();
+    });
   });
 
   freeTierTableButton.addEventListener('click', () => {
-    linkClicked('pricing table', freeTierTableButton.innerHTML, null);
     selectedTier = 0;
-    openAuthPortal();
+    linkClicked('pricing table', freeTierTableButton.innerHTML, createSubscriptionDialoguePath());
+    navigationProcess();
   });
 
-  basicTierCardButton.addEventListener('click', () => {
-    linkClicked('pricing card', basicTierCardButton.innerHTML, null);
-    selectedTier = 1;
-    openAuthPortal();
+  basicTierCardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      selectedTier = 1;
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
+      navigationProcess();
+    });
   });
 
   basicTierTableButton.addEventListener('click', () => {
-    linkClicked('pricing table', basicTierTableButton.innerHTML, null);
     selectedTier = 1;
-    openAuthPortal();
+    linkClicked('pricing table', basicTierTableButton.innerHTML, createSubscriptionDialoguePath());
+    navigationProcess();
   });
 
-  proTierCardButton.addEventListener('click', () => {
-    linkClicked('pricing card', proTierCardButton.innerHTML, null);
-    selectedTier = 2;
-    openAuthPortal();
+  proTierCardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      selectedTier = 2;
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
+      navigationProcess();
+    });
   });
 
   proTierTableButton.addEventListener('click', () => {
-    linkClicked('pricing table', proTierTableButton.innerHTML, null);
     selectedTier = 2;
-    openAuthPortal();
+    linkClicked('pricing table', proTierTableButton.innerHTML, createSubscriptionDialoguePath());
+    navigationProcess();
   });
 
-  businessTierCardButton.addEventListener('click', () => {
-    linkClicked('pricing card', businessTierCardButton.innerHTML, null);
-    selectedTier = 3;
-    openAuthPortal();
+  businessTierCardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      selectedTier = 3;
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
+      navigationProcess();
+    });
   });
 
   businessTierTableButton.addEventListener('click', () => {
-    linkClicked('pricing table', businessTierTableButton.innerHTML, null);
     selectedTier = 3;
-    openAuthPortal();
+    linkClicked('pricing table', businessTierTableButton.innerHTML, createSubscriptionDialoguePath());
+    navigationProcess();
   });
 });
