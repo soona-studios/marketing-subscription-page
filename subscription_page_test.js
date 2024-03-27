@@ -81,55 +81,55 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', () => {
       selectedTier = 0;
       linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath('start_for_free'));
-      navigationProcess();
+      navigationProcess('start_for_free');
     });
   });
 
   freeTierTableButton.addEventListener('click', () => {
     selectedTier = 0;
     linkClicked('pricing table', freeTierTableButton.innerHTML, createSubscriptionDialoguePath('start_for_free'));
-    navigationProcess();
+    navigationProcess('start_for_free');
   });
 
   basicTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 1;
       linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_basic`));
-      navigationProcess();
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_basic`);
     });
   });
 
   basicTierTableButton.addEventListener('click', () => {
     selectedTier = 1;
     linkClicked('pricing table', basicTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_basic`));
-    navigationProcess();
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_basic`);
   });
 
   proTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 2;
       linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_pro`));
-      navigationProcess();
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_pro`);
     });
   });
 
   proTierTableButton.addEventListener('click', () => {
     selectedTier = 2;
     linkClicked('pricing table', proTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_pro`));
-    navigationProcess();
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_pro`);
   });
 
   businessTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 3;
       linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_business`));
-      navigationProcess();
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_business`);
     });
   });
 
   businessTierTableButton.addEventListener('click', () => {
     selectedTier = 3;
     linkClicked('pricing table', businessTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_business`));
-    navigationProcess();
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_business`);
   });
 });
