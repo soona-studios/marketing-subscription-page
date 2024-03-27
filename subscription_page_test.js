@@ -12,12 +12,13 @@ const timeFrames = [ 'month', 'year' ];
   timeFrame = 1;
 
 // functions
-function navigationProcess() {
-  window.location.href = createSubscriptionDialoguePath();
+function navigationProcess(source = null) {
+  window.location.href = createSubscriptionDialoguePath(source);
 }
 
-function createSubscriptionDialoguePath() {
+function createSubscriptionDialoguePath(source = null) {
   let url = `${baseUrl}/#/sign-up?`;
+  if (source) url += `account_creation_source=${source}_pricing&`;
   if (selectedTier !== 0) {
     url += `open_subscription_checkout=${subscriptionTiers[selectedTier]}&recurring_interval=${timeFrames[timeFrame]}&redirect=/`;
   }
@@ -79,56 +80,56 @@ document.addEventListener('DOMContentLoaded', function () {
   freeTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 0;
-      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
-      navigationProcess();
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath('start_for_free'));
+      navigationProcess('start_for_free');
     });
   });
 
   freeTierTableButton.addEventListener('click', () => {
     selectedTier = 0;
-    linkClicked('pricing table', freeTierTableButton.innerHTML, createSubscriptionDialoguePath());
-    navigationProcess();
+    linkClicked('pricing table', freeTierTableButton.innerHTML, createSubscriptionDialoguePath('start_for_free'));
+    navigationProcess('start_for_free');
   });
 
   basicTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 1;
-      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
-      navigationProcess();
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_basic`));
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_basic`);
     });
   });
 
   basicTierTableButton.addEventListener('click', () => {
     selectedTier = 1;
-    linkClicked('pricing table', basicTierTableButton.innerHTML, createSubscriptionDialoguePath());
-    navigationProcess();
+    linkClicked('pricing table', basicTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_basic`));
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_basic`);
   });
 
   proTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 2;
-      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
-      navigationProcess();
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_pro`));
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_pro`);
     });
   });
 
   proTierTableButton.addEventListener('click', () => {
     selectedTier = 2;
-    linkClicked('pricing table', proTierTableButton.innerHTML, createSubscriptionDialoguePath());
-    navigationProcess();
+    linkClicked('pricing table', proTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_pro`));
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_pro`);
   });
 
   businessTierCardButtons.forEach(button => {
     button.addEventListener('click', () => {
       selectedTier = 3;
-      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath());
-      navigationProcess();
+      linkClicked('pricing card', button.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_business`));
+      navigationProcess(`get_started_${timeFrames[timeFrame]}_business`);
     });
   });
 
   businessTierTableButton.addEventListener('click', () => {
     selectedTier = 3;
-    linkClicked('pricing table', businessTierTableButton.innerHTML, createSubscriptionDialoguePath());
-    navigationProcess();
+    linkClicked('pricing table', businessTierTableButton.innerHTML, createSubscriptionDialoguePath(`get_started_${timeFrames[timeFrame]}_business`));
+    navigationProcess(`get_started_${timeFrames[timeFrame]}_business`);
   });
 });
